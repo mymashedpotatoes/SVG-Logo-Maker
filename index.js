@@ -41,8 +41,8 @@ function init() {
   inquirer
 .prompt(questions)
 .then((res) => {
-  console.log(res);
   writeToFile('./examples/logo.svg', generateLogo(res));
+  console.log(res);
 });
 }
 
