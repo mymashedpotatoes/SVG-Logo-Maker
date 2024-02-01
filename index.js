@@ -5,7 +5,7 @@ const { Circle, Triangle, Square } = require("./lib/shapes");
 const fs = require('fs'); 
 
 
-
+//questions for prompts
 const questions = [
   {
       type: 'input',
@@ -30,13 +30,13 @@ const questions = [
   },
 ];
 
-
+//after questions are answered data is written to file
 function writeToFile(fileName, data) {
   fs.writeFile(fileName, data, (err) =>
   err ? console.error(err) : console.log('Generating!'))
 }
 
-
+//prompt for questions and make logo.svg file
 function init() {
   inquirer
 .prompt(questions)
@@ -47,7 +47,7 @@ function init() {
 }
 
 
-
+//function to apply the data to the shape, color, text, anf text color
 function generateLogo(data) {
 
   var shape = ""; 
