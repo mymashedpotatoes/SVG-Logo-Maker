@@ -1,42 +1,70 @@
-//require jest and inquirer
+//packages needed for the application
 const Jest = require('jest');
-const Inquirer = require('inquirer');
+const inquirer = require('inquirer');
+const { Circle, Triangle, Square } = require("./lib/shapes");
+const fs = require('fs'); 
 
-//Each shape class should be tested for a `render()` method that returns a string for the corresponding SVG file with the given shape color.
 
-inquirer
-  .prompt([
-    /* Pass your questions in here */
-    {
-        type: "input",
-        name: "text",
-        message: "Text: Enter up to 3 characters:",
-    },
-    {
-        type: "input",
-        name: "text-color",
-        message: "Text Color: Enter a color keyword (OR a hexadecimal number):",
-    },
-    {
-        type: "input",
-        name: "shape",
-        message: "Shape Color: Enter a color keyword (OR a hexadecimal number):",
-    },
-    {
-        type: "list",
-        name: "shape",
-        message: "Which shape would you like?",
-        choices: ["Circle", "Square", "Triangle"],
-    },
 
-  ])
-  .then((answers) => {
-    // Use user feedback for... whatever!!
-  })
-  .catch((error) => {
-    if (error.isTtyError) {
-      console.log(error);
-    } else {
-      console.log("Success!");
-    }
-  });
+const questions = [
+  {
+      type: 'input',
+      message: 'Text: Choose up to 3 characters',
+      name: 'text',
+  },
+  {
+      type: 'input',
+      message: 'Text Color: Choose what color you want the text to be (can be a hexidecimal number)',
+      name: 'textColor',
+  },
+  {
+      type: 'list',
+      message: 'Select a shape for the logo',
+      name: 'shape',
+      choices: ['Circle', 'Square', 'Triangle']
+  },
+  {
+      type: 'input',
+      message: 'Shape Color: Choose what color you want the shape to be (can be a hexidecimal number)',
+      name: 'shapeColor',
+  },
+];
+
+
+function writeToFile(fileName, data) {
+  fs.writeFile(fileName, data, (err) =>
+  err ? console.error(err) : console.log('Generating!'))
+}
+
+
+function init() {
+  inquirer
+.prompt(questions)
+.then((res) => {
+  console.log(res);
+  writeToFile('./examples/logo.svg', generateLogo(res));
+});
+}
+
+
+
+function generateLogo(data) {
+
+  var shape = ""; 
+
+  if (data.shape === "Circle") {
+      shape = new Circle()
+  } else if (data.shape === "Square") {
+      shape = new Square()
+  } else {
+      shape = new Triangle()
+  }
+
+
+  shape.setColor(data.shapeColor);
+  shape.setText(data.text)
+  shape.setTextColor(data.textColor)
+  return shape.render()
+}
+
+init();
